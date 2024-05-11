@@ -5,87 +5,56 @@ for i in range(8):
         line.append(s)
     board.append(line)
 
-colour = input()
-if colour == 'black':
+input_colour = input()
+target = 'b'
+colour = 'w'
+
+if input_colour == 'black':
     target = 'w'
     colour = 'b'
-else:
-    target = 'b'
-    colour = 'w'
+
+directions = {
+    'north': lambda r, c: (r + 1, c),
+    'south': lambda r, c: (r - 1, c),
+    'east': lambda r, c: (r, c + 1),
+    'west': lambda r, c: (r, c - 1),
+    'north_east': lambda r, c: (r + 1, c + 1),
+    'north_west': lambda r, c: (r + 1, c - 1),
+    'south_west': lambda r, c: (r - 1, c - 1),
+    'south_east': lambda r, c: (r - 1, c + 1),
+}
 
 
-# def valid(r, c, b, t):
-#     directions = [[r + 1, c], [r - 1, c], [r, c + 1], [r, c - 1], [r + 1, c + 1], [r + 1, c - 1], [r - 1, c - 1],
-#                   [r - 1, c + 1], [r - 1, c - 1]]
-#     for d in directions:
-#         if 0 > d[0] or d[0] >= 8 or 0 > d[1] or d[1] >= 8:
-#             continue
-#         if b[d[0]][d[1]] == t:
-#             continue
-#         else:
-#             return False
-#     return True
-
-
-def check(r, c, b, t, cur_colour):
+def check(_row, _col):
     captured = 0
-    directions = ['north', 'south', 'east', 'west', 'north_east', 'north_west', 'south_west', 'south_east']
     for d in directions:
-        result = capture(r, c, b, t, cur_colour, d)
-        if result:
-            captured += result
+        r, c = directions[d](_row, _col)
+        result = do_check(r, c, d)
+        if result[0]:
+            captured += result[1]
 
     return captured
 
 
-def capture(r, c, b, t, cur_colour, cur_dir):
-    """
+def do_check(_row, _col, cur_dir) -> (bool, int):
+    if (_row >= 8 or _col >= 8 or _row < 0 or _col < 0) or board[_row][_col] == '0':
+        return False, 0
 
-    :param r: row
-    :param c: col
-    :param b: board
-    :param t: target
-    :param cur_colour: current colour the player is
-    :param cur_dir: the direction that the player is going
-    :return: how many captured moves
-    """
+    if board[_row][_col] == colour:
+        return True, 0
+
     captured = 0
-    if b[r][c] == cur_colour:
-        return True
-    elif b[r][c] == t:
-        captured += 1
 
-    if cur_dir == 'north':
-        r += 1
-    elif cur_dir == 'south':
-        r -= 1
-    elif cur_dir == 'east':
-        c += 1
-    elif cur_dir == 'west':
-        c -= 1
-    elif cur_dir == 'north_east':
-        c += 1
-        r += 1
-    elif cur_dir == 'north_west':
-        r += 1
-        c -= 1
-    elif cur_dir == 'south_west':
-        r -= 1
-        c -= 1
-    elif cur_dir == 'south_east':
-        r -= 1
-        c += 1
+    if board[_row][_col] == target:
+        captured = 1
 
-    if r >= 8 or c >= 8 or r < 0 or c < 0:
-        return False
-    if b[r][c] == '0':
-        return False
+    next_row, next_col = directions[cur_dir](_row, _col)
 
-    result = capture(r, c, b, t, cur_colour, cur_dir)
-    if result:
-        return captured + result
-    else:
-        return False
+    result = do_check(next_row, next_col, cur_dir)
+    if result[0]:
+        return True, captured + result[1]
+
+    return result
 
 
 best = 0
@@ -93,11 +62,11 @@ best_squares = None
 for row in range(8):
     for col in range(8):
         square = board[row][col]
-        if square == '0':
-            new = check(row, col, board, target, colour)
-            if new > best:
-                best = new
-                best_squares = f'{col + 1},{8 - row}'
-        else:
+        if square != '0':
             continue
+        new = check(row, col)
+        if new > best:
+            best = new
+            best_squares = f'{col + 1},{8 - row}'
+
 print(best_squares)

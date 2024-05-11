@@ -14,15 +14,17 @@ else:
     colour = 'w'
 
 
-def valid(r, c, b, t):
-    directions = [[r + 1, c], [r - 1, c], [r, c + 1], [r, c - 1], [r + 1, c + 1], [r + 1, c - 1], [r - 1, c - 1],
-                  [r - 1, c + 1], [r - 1, c - 1]]
-    for d in directions:
-        if 0 > d[0] or d[0] >= 8 or 0 > d[1] or d[1] >= 8:
-            continue
-        if b[d[0]][d[1]] == t:
-            return True
-    return False
+# def valid(r, c, b, t):
+#     directions = [[r + 1, c], [r - 1, c], [r, c + 1], [r, c - 1], [r + 1, c + 1], [r + 1, c - 1], [r - 1, c - 1],
+#                   [r - 1, c + 1], [r - 1, c - 1]]
+#     for d in directions:
+#         if 0 > d[0] or d[0] >= 8 or 0 > d[1] or d[1] >= 8:
+#             continue
+#         if b[d[0]][d[1]] == t:
+#             continue
+#         else:
+#             return False
+#     return True
 
 
 def check(r, c, b, t, cur_colour):
@@ -49,7 +51,6 @@ def capture(r, c, b, t, cur_colour, cur_dir):
     """
     captured = 0
     if b[r][c] == cur_colour:
-
         return True
     elif b[r][c] == t:
         captured += 1
@@ -77,6 +78,8 @@ def capture(r, c, b, t, cur_colour, cur_dir):
 
     if r >= 8 or c >= 8 or r < 0 or c < 0:
         return False
+    if b[r][c] == '0':
+        return False
 
     result = capture(r, c, b, t, cur_colour, cur_dir)
     if result:
@@ -90,7 +93,7 @@ best_squares = None
 for row in range(8):
     for col in range(8):
         square = board[row][col]
-        if square == '0' and valid(row, col, board, target):
+        if square == '0':
             new = check(row, col, board, target, colour)
             if new > best:
                 best = new

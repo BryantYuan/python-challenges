@@ -32,4 +32,4 @@ def find_route(end, start, prev):
     return total_pos
 
 
-print(find_route(all_nodes[nodes[-1]], all_nodes[nodes[0]], [])+1)
+print(find_route(all_nodes[nodes[-1]], all_nodes[nodes[0]], []))

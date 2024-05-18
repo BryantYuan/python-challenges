@@ -94,6 +94,6 @@
 # else:
 #     print(-1)
 
-
 global hi
+hi = 0
 print(hi)

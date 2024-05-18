@@ -95,4 +95,5 @@
 #     print(-1)
 
 
-
+global hi
+print(hi)

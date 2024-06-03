@@ -56,6 +56,8 @@ elif depth2 != expected_depth:
         node2 = node2.parent
         depth -= 1
 
+print(node2.value)
+print(node1.value)
 while node1.parent != node2.parent:
     node1 = node1.parent
     node2 = node2.parent

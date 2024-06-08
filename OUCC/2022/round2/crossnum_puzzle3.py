@@ -1,6 +1,6 @@
 area = input().split(' ')
-row_len = int(area[0])
-col_len = int(area[1])
+col_len = int(area[0])
+row_len = int(area[1])
 crossword = []
 
 for i in range(row_len):

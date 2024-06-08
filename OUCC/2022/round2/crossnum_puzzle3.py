@@ -10,52 +10,44 @@ for i in range(row_len):
         crossword_line.append(j)
     crossword.append(crossword_line)
 
+max_cols: dict = {}
 
-def find_number(_row, _col, _direction):
+
+def find_numbers_horizontal(_row, _col):
     number = ''
-    if _direction == 'right':
-        if _col >= col_len:
-            return ''
+    while _col < col_len:
         if crossword[_row][_col] == 'X':
-            return ''
+            break
         number += crossword[_row][_col]
         _col += 1
-        new = find_number(_row, _col, 'right')
-        if new == '':
-            return number
-        number += new
-    else:
-        if _row >= row_len:
-            return ''
+    return number
+
+
+def find_numbers_vertical(_row, _col):
+    number = ''
+    while _row < row_len:
         if crossword[_row][_col] == 'X':
-            return ''
+            break
         number += crossword[_row][_col]
         _row += 1
-        new = find_number(_row, _col, 'down')
-        if new == '':
-            return number
-        number += new
+    max_cols[_col] = _row
     return number
 
 
 best = 0
-col = 0
 # There is some sort of error in here
 for row in range(row_len):
-    while col < col_len:
-        node = crossword[row][col]
-        if node == 'X':
-            pass
-        else:
-            new_number = int(find_number(row, col, 'right'))
-            if new_number > best:
-                best = new_number
-
-            new_number = int(find_number(row, col, 'down'))
-            if new_number > best:
-                best = new_number
-
-        col += 1
     col = 0
+    while col < col_len:
+        if crossword[row][col] == 'X':
+            col += 1
+            continue
+
+        horizontal_number = int(find_numbers_horizontal(row, col))
+        vertical_number = 0
+        if row > max_cols[col]:
+            vertical_number = int(find_numbers_vertical(row, col))
+
+        best = max(best, horizontal_number, vertical_number)
 
 print(best)

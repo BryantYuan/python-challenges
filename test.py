@@ -38,14 +38,7 @@
 #     n -= 1
 #     asteriks += '*'
 # print(asteriks)
-# import random
-# if input() == '10 10':
-#   print(5)
-# else:
-#   l = random.randint(1,10)
-#   print(l)
-# with open('Ansers.txt', 'w') as file:
-#     file.write(str(l))
+
 # # sentence = input()
 # # sentence = sentence.lower()
 # # word = input()

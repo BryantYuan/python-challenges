@@ -10,7 +10,7 @@ for i in range(row_len):
         crossword_line.append(j)
     crossword.append(crossword_line)
 
-max_cols: dict = {}
+max_cols: dict = {i: -1 for i in range(col_len)}
 
 
 def find_numbers_horizontal(_row, _col):
@@ -20,7 +20,7 @@ def find_numbers_horizontal(_row, _col):
             break
         number += crossword[_row][_col]
         _col += 1
-    return number
+    return _col, number
 
 
 def find_numbers_vertical(_row, _col):
@@ -35,19 +35,20 @@ def find_numbers_vertical(_row, _col):
 
 
 best = 0
-# There is some sort of error in here
 for row in range(row_len):
     col = 0
+
     while col < col_len:
         if crossword[row][col] == 'X':
             col += 1
             continue
 
-        horizontal_number = int(find_numbers_horizontal(row, col))
         vertical_number = 0
         if row > max_cols[col]:
             vertical_number = int(find_numbers_vertical(row, col))
 
-        best = max(best, horizontal_number, vertical_number)
+        col, horizontal_number = find_numbers_horizontal(row, col)
+
+        best = max(best, int(horizontal_number), vertical_number)
 
 print(best)

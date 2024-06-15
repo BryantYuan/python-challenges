@@ -18,18 +18,21 @@ for i in range(total):
     all_nodes[new[1]].previous_node = all_nodes[new[0]]
 
 
-def find_route(end, start, prev):
+def find_route(end, start):
     total_pos = 0
     if start == end:
         return 1
-    prev.append(start)
+
+    if start.routes != 0:
+        return start.routes
+
     pos = start.next_node
     for p in pos:
-        if p not in prev:
-            total_pos += find_route(end, p, prev)
-    prev.remove(start)
+        cur_possibilities = find_route(end, p)
+        total_pos += cur_possibilities
+        p.routes = cur_possibilities
 
     return total_pos
 
 
-print(find_route(all_nodes[nodes[-1]], all_nodes[nodes[0]], []))
+print(find_route(all_nodes[nodes[-1]], all_nodes[nodes[0]]))

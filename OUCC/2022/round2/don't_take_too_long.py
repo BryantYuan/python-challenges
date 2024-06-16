@@ -6,10 +6,10 @@ time2 = 0  # The time it takes to do all the tasks(2)
 for i in range(total_tasks):
     tasks.append(int(input()))
 
-tasks.sort()  # We want to work with the most time-consuming tasks
+tasks.sort()  # We want to work with the most time-consuming task one at a time.
 
 while tasks:
-    cur_task = tasks.pop()  # Get the most time-consuming tasks
+    cur_task = tasks.pop()  # Get the most time-consuming task
 
     if time1 > time2:
         time2 += cur_task

@@ -1,6 +1,3 @@
-import sys
-
-sys.setrecursionlimit(10**6)
 steps_available: int = int(input())
 steps_remaining: dict = {}
 

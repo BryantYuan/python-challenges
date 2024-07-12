@@ -1,7 +1,7 @@
 n = int(input())
 boards = []
 prev = ''
-for i in input(''):
+for i in input():
     if i == ' ':
         boards.append(int(prev))
         prev = ''

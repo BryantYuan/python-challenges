@@ -1,0 +1,2 @@
+command w: Close
+comand

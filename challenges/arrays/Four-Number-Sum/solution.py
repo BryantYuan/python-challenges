@@ -1,35 +1,24 @@
 def fourNumberSum(array, targetSum):
-    result = doFourNumberSum(array, targetSum, {}, 0)
-    return result
+    if len(array) < 4:
+        return []
 
+    cache = {array[0] + array[1]: [[array[0], array[1]]]}
+    result = []
 
-def doFourNumberSum(array, targetSum, cache, number_of_items) -> list:
-    list_of_sums = []
+    for index in range(2, len(array) - 1):
+        cur_val = array[index]
 
-    number_of_items += 2
-    for index in range(len(array) - 1):
-        value1 = array[index]
-        for index2 in range(index + 1, len(array)):
-            value2 = array[index2]
-            if number_of_items == 4:
-                if value1 + value2 == targetSum:
-                    list_of_sums.append([value1, value2])
+        for num in array[index + 1:]:
+            cur_total = num + cur_val
+            cur_gap = targetSum - cur_total
+            if cur_gap not in cache:
                 continue
 
-            result = doFourNumberSum(array[index2 + 1:], targetSum - value1 - value2, cache, number_of_items)
-            if len(result) > 0:
-                for i in range(len(result)):
-                    new = [value1, value2, result[i][0], result[i][1]]
-                    list_of_sums.append(new)
+            for existing_pair in cache[cur_gap]:
+                result.append(existing_pair + [cur_val, num])
 
-    return list_of_sums
+        for prev_num in array[:index]:
+            cur_total = cur_val + prev_num
+            cache.setdefault(cur_total, []).append([prev_num, cur_val])
 
-
-def getPairs(array, cache):
-    cur_num = array[-1]
-    for num in array[:-1]:
-        if cur_num + num in cache:
-            cache[cur_num + num].append([cur_num, num])
-        else:
-            cache[cur_num + num] = [cur_num, num]
-    return cache
+    return result

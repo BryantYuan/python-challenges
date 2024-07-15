@@ -6,11 +6,9 @@ def reverseWordsInString(string: str) -> str:
             cur_word += char
             continue
 
-        new = ' ' + cur_word + result
-        result = new
+        result = ' ' + cur_word + result
         cur_word = ''
 
-    new = cur_word + result
-    result = new
+    result = cur_word + result
 
     return result

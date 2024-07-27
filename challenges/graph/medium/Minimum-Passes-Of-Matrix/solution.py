@@ -1,7 +1,4 @@
-from typing import List
-
-
-def minimumPassesOfMatrix(matrix: List[List[int]], status=None) -> int:
+def minimumPassesOfMatrix(matrix: list, status=None) -> int:
     """
     This will calculate the number of rounds to change every single number in the matrix to positive.
     Exempts 0
@@ -14,7 +11,7 @@ def minimumPassesOfMatrix(matrix: List[List[int]], status=None) -> int:
     row: int = len(matrix)
 
     if status is None:
-        status: List[List] = [[False for i in range(col)] for j in range(row)]  # Assume all is negative
+        status = [[False for i in range(col)] for j in range(row)]  # Assume all is negative
         for r in range(row):
             for c in range(col):
                 node: int = matrix[r][c]
@@ -48,12 +45,12 @@ def minimumPassesOfMatrix(matrix: List[List[int]], status=None) -> int:
 def checkNegative(status):
     for row in status:
         for i in row:
-            if not i and i is not None:
+            if i is False and i is not None:
                 return True
     return False
 
 
-def checkForPositive(status: List[List], row: int, col: int, cur_col: int, cur_row: int) -> bool:
+def checkForPositive(status: list, row: int, col: int, cur_col: int, cur_row: int) -> bool:
     """
     Checks if there are any positive numbers around the cur node
     :param cur_row: The current row we are on
@@ -79,6 +76,3 @@ def checkForPositive(status: List[List], row: int, col: int, cur_col: int, cur_r
             return True
 
     return False
-
-
-print(minimumPassesOfMatrix([[0, -2, -1], [-5, 2, 0], [-6, -2, 0]]))

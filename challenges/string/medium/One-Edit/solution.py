@@ -6,7 +6,7 @@ def oneEdit(stringOne, stringTwo):
     if abs(lengthOne - lengthTwo) > 1:  # Check if each difference is 1
         return False
 
-    if lengthTwo > lengthOne:
+    if lengthTwo > lengthOne:  # This is for add check
         for i in range(lengthOne):
             char1 = stringOne[i]
             char2 = stringTwo[i]
@@ -22,7 +22,7 @@ def oneEdit(stringOne, stringTwo):
                 else:
                     return False
 
-    elif lengthTwo < lengthOne:
+    elif lengthTwo < lengthOne:  # This is for remove check
         for i in range(lengthTwo):
             char1 = stringOne[i]
             char2 = stringTwo[i]

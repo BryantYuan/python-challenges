@@ -1,3 +1,5 @@
+# IN PROGRESS.
+
 class LinkedList:
     def __init__(self, value):
         self.value = value
@@ -5,11 +7,9 @@ class LinkedList:
 
 
 def mergingLinkedLists(linkedList1, linkedList2):
-    while linkedList1 is not None and linkedList2 is not None:
-        if linkedList1 == linkedList2:
-            return linkedList1
-
-        linkedList1 = linkedList1.next
-        linkedList2 = linkedList2.next
+    while linkedList1 is not None:
+        while linkedList2 is not None:
+            linkedList1 = linkedList1.next
+            linkedList2 = linkedList2.next
 
     return None

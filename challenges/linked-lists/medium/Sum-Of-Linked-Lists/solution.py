@@ -5,28 +5,28 @@ class LinkedList:
 
 
 def sumOfLinkedLists(linkedLists1, linkedLists2):
-    l1 = ''
-    l2 = ''
-    while linkedLists1 is not None:
-        l1 = str(linkedLists1.value) + l1
-        linkedLists1 = linkedLists1.next
-
-    while linkedLists2 is not None:
-        l2 = str(linkedLists2.value) + l2
-        linkedLists2 = linkedLists2.next
-
-    sum_of_lists = str(int(l1) + int(l2))
     prev_node = None
-    head = None
+    carry = 0
+    while linkedLists1 is not None or linkedLists2 is not None:
+        val1 = linkedLists1.value if linkedLists1 is not None else 0
+        val2 = linkedLists2.value if linkedLists2 is not None else 0
+        _sum = val1 + val2 + carry
 
-    for num in reversed(sum_of_lists):
-        node = LinkedList(int(num))
+        if _sum >= 10:
+            carry = 1
+            _sum -= 10
+        else:
+            carry = 0
+        new_object = LinkedList(_sum)
 
         if prev_node is not None:
-            prev_node.next = node
+            prev_node.next = new_object
         else:
-            head = node
+            head = new_object
 
-        prev_node = node
+        prev_node = new_object
+
+        linkedLists1 = linkedLists1.next if linkedLists1 is not None else None
+        linkedLists2 = linkedLists2.next if linkedLists2 is not None else None
 
     return head

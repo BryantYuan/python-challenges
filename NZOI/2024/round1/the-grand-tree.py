@@ -24,7 +24,7 @@ class BinaryTree:
         self.next = []
 
 
-applesAmount, tastinessWanted = tuple(map(int, input().split(' ')))  # Turns it into an int
+applesAmount, target_value = tuple(map(int, input().split(' ')))  # Turns it into an int
 allApples = input().split(' ')
 
 root = BinaryTree(int(allApples[0]))
@@ -37,23 +37,35 @@ for i in range(applesAmount - 1):
     allNodes[branch1].next.append(allNodes[branch2])
 
 
+class Result:
+    def __init__(self, flag, value):
+        self.flag = flag  # 0: Found, 1: Not Found, 2: Closest Taste
+        self.value = value
+
+
 def pickApples(_root: BinaryTree, currentSum):
     closest_taste = -1
-    diff = float('inf')
+
     newSum = currentSum + _root.value
-    if newSum >= tastinessWanted:
-        return newSum
+    if newSum == target_value:
+        return Result(0, newSum)
+    if newSum > target_value:
+        return Result(1, newSum)
 
     nextNodes = _root.next
 
     for nextVal in nextNodes:
         applesCollected = pickApples(nextVal, newSum)
-        if applesCollected >= tastinessWanted:
-            if applesCollected - tastinessWanted < diff:
-                diff = applesCollected - tastinessWanted
-                closest_taste = applesCollected
+        if applesCollected.flag == 2:
+            continue
+        if applesCollected.flag == 0:
+            return Result(0, applesCollected.value)
+        if applesCollected.flag == 1:
+            if closest_taste == -1 or applesCollected.value < closest_taste:
+                closest_taste = applesCollected.value
 
-    return closest_taste
+    closest_taste = closest_taste if closest_taste != -1 else newSum
+    return Result(2, closest_taste)
 
 
-print(pickApples(root, 0))
+print(pickApples(root, 0).value)

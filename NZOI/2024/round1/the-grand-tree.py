@@ -16,6 +16,7 @@ You however, are aware that that might not always be possible, so you have decid
 to settle for the smallest possible sum of tastiness greater than or equal to M.
 Due to the staggering size of the tree, you cannot work out which apples to pick in
 your head, and thus have decided to sit down and write a program instead."""
+import sys
 
 
 class BinaryTree:
@@ -26,6 +27,7 @@ class BinaryTree:
 
 applesAmount, target_value = tuple(map(int, input().split(' ')))  # Turns it into an int
 allApples = input().split(' ')
+sys.setrecursionlimit(100000)
 
 root = BinaryTree(int(allApples[0]))
 allNodes = [root]
@@ -39,7 +41,7 @@ for i in range(applesAmount - 1):
 
 class Result:
     def __init__(self, flag, value):
-        self.flag = flag  # 0: Found, 1: Not Found, 2: Closest Taste
+        self.flag = flag  # 0: Found, perfect, 1: Found, but unsure if it is the best
         self.value = value
 
 
@@ -53,11 +55,8 @@ def pickApples(_root: BinaryTree, currentSum):
         return Result(1, newSum)
 
     nextNodes = _root.next
-
     for nextVal in nextNodes:
         applesCollected = pickApples(nextVal, newSum)
-        if applesCollected.flag == 2:
-            continue
         if applesCollected.flag == 0:
             return Result(0, applesCollected.value)
         if applesCollected.flag == 1:

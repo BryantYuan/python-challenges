@@ -11,74 +11,55 @@ of boxes she needs for this amount."""
 cookieA, cookieB, targetAmount = tuple(input().split(' '))  # Unpacking, same as a = list[0], b =list[1]
 
 
-def recursiveFunction(target, a, b):
-    best_diff = float('inf')
-    least_cookies = float('inf')
+def findTarget(target, a, b):
+    boxes_needed = round(target / a)
+    diff = abs(boxes_needed * a - target)
 
-    if target % a == 0:
-        least_cookies = target // a
-        best_diff = 0
-        if a > b:
-            return best_diff, least_cookies
-    else:
-        div = target // a
-        remainder = target - div * a if target - div * a > (div + 1) * a - target else (div + 1) * a - target
+    if diff == 0 and a >= b:
+        return 0, boxes_needed
 
-        if remainder == best_diff:
-            if div < least_cookies:
-                least_cookies = div
-                best_diff = remainder
+    least_cookies = boxes_needed
+    best_diff = diff
 
-        if remainder < best_diff:
-            least_cookies = div
-            best_diff = remainder
+    # Time to check B
 
-    if target % b == 0:
-        if target // b < least_cookies:
-            least_cookies = target // b
-            best_diff = 0
-            if b > a:
-                return best_diff, least_cookies
-    else:
-        div = target // b
-        div += 1
-        remainder = target - div * b if target - div * b > (div + 1) * b - target else (div + 1) * b - target
+    boxes_needed = round(target / b)
+    diff = abs(boxes_needed * b - target)
 
-        if remainder == best_diff:
-            if div < least_cookies:
-                least_cookies = div
-                best_diff = remainder
+    if diff == 0:
+        return 0, boxes_needed
 
-        if remainder < best_diff:
-            least_cookies = div
-            best_diff = remainder
+    if diff < best_diff:
+        best_diff = diff
+        least_cookies = boxes_needed
+    elif diff == best_diff:
+        if boxes_needed < least_cookies:
+            best_diff = diff
+            least_cookies = boxes_needed
 
-    if a > b:
-        starting_number = (target // a + 1) * a
-        count_down = a
-        other_number = b
-    else:
-        starting_number = (target // b + 1) * b
-        count_down = b
-        other_number = a
+    larger_number = a if a > b else b
+    smaller_number = a if a < b else b
+    starting_number = target // larger_number * larger_number
 
-    index = 0
-    for i in range(starting_number, -1, -count_down):
-        new_number = i + index * other_number
-        if new_number == target:
-            return 0, index + i // count_down
+    for number in range(starting_number, 0, -larger_number):
+        if (target - number) % smaller_number == 0:
+            boxes_needed = number // larger_number + (target - number) // smaller_number
+            return 0, boxes_needed
 
-        diff = abs(new_number - target)
-        cur_cookies = index + i // count_down
+        if best_diff == 0:
+            continue
+
+        div = round((target - number) / smaller_number)
+        diff = abs(target - (div * smaller_number + number))
+        boxes_needed = div + number // larger_number
+
         if diff < best_diff:
             best_diff = diff
-            least_cookies = cur_cookies
-
-        if diff == best_diff:
-            if cur_cookies < least_cookies:
-                least_cookies = cur_cookies
-
-        index += 1
+            least_cookies = boxes_needed
+        elif diff == best_diff:
+            if boxes_needed < least_cookies:
+                best_diff = diff
+                least_cookies = boxes_needed
 
     return best_diff, least_cookies
 
@@ -90,5 +71,5 @@ cookieB = int(cookieB)
 if cookieA > targetAmount and cookieB > targetAmount:
     print(targetAmount, 0)
 else:
-    result = recursiveFunction(targetAmount, cookieA, cookieB)
+    result = findTarget(targetAmount, cookieA, cookieB)
     print(result[0], result[1])

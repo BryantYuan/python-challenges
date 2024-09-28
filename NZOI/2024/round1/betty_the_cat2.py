@@ -12,54 +12,36 @@ cookieA, cookieB, targetAmount = tuple(input().split(' '))  # Unpacking, same as
 
 
 def findTarget(target, a, b):
-    boxes_needed = round(target / a)
-    diff = abs(boxes_needed * a - target)
+    larger_number = max(a, b)
+    smaller_number = min(a, b)
 
-    if diff == 0 and a >= b:
-        return 0, boxes_needed
+    if target % larger_number == 0:
+        return 0, target // larger_number
 
-    least_cookies = boxes_needed
-    best_diff = diff
+    number_of_cookies_used = round(target / larger_number)
+    best_diff = abs(target - number_of_cookies_used * larger_number)
+    least_cookies = number_of_cookies_used
 
-    # Time to check B
+    cur_number = number_of_cookies_used * larger_number                           
+    while cur_number >= 0:
+        gap = abs(target - cur_number)
+        cur_diff = abs(target - (round(gap / smaller_number) * smaller_number + cur_number))
+        cur_cookies = round(gap / smaller_number) + number_of_cookies_used
 
-    boxes_needed = round(target / b)
-    diff = abs(boxes_needed * b - target)
+        if cur_diff == 0:
+            return 0, cur_cookies
 
-    if diff == 0:
-        return 0, boxes_needed
+        if cur_diff < best_diff:
+            best_diff = cur_diff
+            least_cookies = cur_cookies
 
-    if diff < best_diff:
-        best_diff = diff
-        least_cookies = boxes_needed
-    elif diff == best_diff:
-        if boxes_needed < least_cookies:
-            best_diff = diff
-            least_cookies = boxes_needed
+        elif cur_diff == best_diff:
+            if cur_cookies < least_cookies:
+                best_diff = cur_diff
+                least_cookies = cur_cookies
 
-    larger_number = a if a > b else b
-    smaller_number = a if a < b else b
-    starting_number = target // larger_number * larger_number
-
-    for number in range(starting_number, 0, -larger_number):
-        if (target - number) % smaller_number == 0:
-            boxes_needed = number // larger_number + (target - number) // smaller_number
-            return 0, boxes_needed
-
-        if best_diff == 0:
-            continue
-
-        div = round((target - number) / smaller_number)
-        diff = abs(target - (div * smaller_number + number))
-        boxes_needed = div + number // larger_number
-
-        if diff < best_diff:
-            best_diff = diff
-            least_cookies = boxes_needed
-        elif diff == best_diff:
-            if boxes_needed < least_cookies:
-                best_diff = diff
-                least_cookies = boxes_needed
+        number_of_cookies_used -= 1
+        cur_number = number_of_cookies_used * larger_number
 
     return best_diff, least_cookies
 
